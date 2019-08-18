@@ -17,13 +17,24 @@ if (process.env.NODE_ENV === "production") {
 app.use(routes);
 
 // Connect to the Mongo DB
-mongoose.connect(
-  process.env.MONGODB_URI ||  "mongodb://<dbuser>:<dbpassword>@ds263927.mlab.com:63927/heroku_89w0jbm8",
+
+if (process.env.NODE_ENV === "production") {
+  mongoose.connect(
+    process.env.MONGODB_URI ||  "mongodb://<dbuser>:<dbpassword>@ds263927.mlab.com:63927/heroku_89w0jbm8",
+    {
+      useCreateIndex: true,
+      useNewUrlParser: true
+    }
+  );
+}
+else mongoose.connect(
+  process.env.MONGODB_URI ||  "mongodb://localhost/googlebooks",
   {
     useCreateIndex: true,
     useNewUrlParser: true
   }
 );
+
 
 // Start the API server
 app.listen(PORT, () =>
